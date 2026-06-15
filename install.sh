@@ -44,8 +44,13 @@ if [ "$ORIGINALS_ONLY" = false ]; then
   npx --yes skills add daffy0208/ai-dev-standards@design-system-architect
   npx --yes skills add affaan-m/everything-claude-code@security-review
   npx --yes skills add miketromba/skills@legal-tos-privacy
+  npx --yes skills add prowler-cloud/prowler@tailwind-4
+  npx --yes skills add pbakaus/impeccable@impeccable
+  npx --yes skills add benjitaylor/agentation@agentation
+  npx --yes skills add thebushidocollective/han@gluestack-accessibility
   npx --yes skills add vercel-labs/agent-skills@vercel-react-best-practices
   npx --yes skills add vercel-labs/agent-skills@vercel-composition-patterns
+  npx --yes skills add vercel-labs/agent-skills@vercel-react-native-skills
   npx --yes skills add vercel-labs/agent-skills@web-design-guidelines
   echo ""
 fi

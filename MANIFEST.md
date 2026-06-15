@@ -17,7 +17,11 @@ Upstream skills below are NOT included in this repo. Install them directly from 
 | `design-system-architect` | [daffy0208/ai-dev-standards](https://github.com/daffy0208/ai-dev-standards) | `npx skills add daffy0208/ai-dev-standards@design-system-architect` |
 | `security-review` | [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) | `npx skills add affaan-m/everything-claude-code@security-review` |
 | `legal-tos-privacy` | [miketromba/skills](https://github.com/miketromba/skills) | `npx skills add miketromba/skills@legal-tos-privacy` |
+| `tailwind-4` | [prowler-cloud/prowler](https://github.com/prowler-cloud/prowler) (Apache-2.0) | `npx skills add prowler-cloud/prowler@tailwind-4` |
+| `impeccable` | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `npx skills add pbakaus/impeccable@impeccable` |
+| `agentation` | [benjitaylor/agentation](https://github.com/benjitaylor/agentation) | `npx skills add benjitaylor/agentation@agentation` |
+| `gluestack-accessibility` | [thebushidocollective/han](https://github.com/thebushidocollective/han) | `npx skills add thebushidocollective/han@gluestack-accessibility` |
 | `vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `npx skills add vercel-labs/agent-skills@vercel-react-best-practices` |
 | `vercel-composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `npx skills add vercel-labs/agent-skills@vercel-composition-patterns` |
+| `vercel-react-native-skills` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `npx skills add vercel-labs/agent-skills@vercel-react-native-skills` |
 | `web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | `npx skills add vercel-labs/agent-skills@web-design-guidelines` |
-| `tailwind-4` | [prowler-cloud](https://github.com/prowler-cloud) (Apache-2.0) | `npx skills add prowler-cloud/...@tailwind-4` |

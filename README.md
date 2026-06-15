@@ -1,6 +1,6 @@
 # claude-loadout
 
-12 original skills built by a solo founder who learned the hard way that AI coding agents are powerful and wrong in equal measure.
+13 original skills built by a solo founder who learned the hard way that AI coding agents are powerful and wrong in equal measure.
 
 This isn't a "prompt library." It's a layer of judgment I built on top of Claude Code — skills that slow me down at exactly the moments I shouldn't be moving fast, and speed me up everywhere else.
 
@@ -23,6 +23,16 @@ Skills aren't tools you reach for randomly. They map to project lifecycle stages
 ---
 
 ## Phase 1 — Before you build anything
+
+### `Remote_Skill_Security_Check`
+
+**The problem it solves:** You're about to install a skill someone else wrote. It runs inside your Claude Code session with access to your files, your tools, your git history. A malicious skill could exfiltrate code, inject instructions, or escalate permissions — and it would look like normal AI behavior until something went wrong.
+
+**When to use it:** Before running `npx skills add <anything>` from a source you haven't reviewed yourself. It fetches the skill read-only, checks for prompt injection patterns, data exfiltration attempts, permission escalation, and dangerous tool usage. Gives you a severity-rated report before you decide whether to install.
+
+**Origin:** I was building `skill-modernizer` and kept writing "install this composer skill first" flows. That meant users (and me) would routinely run `npx skills add` on skills we'd never audited. The trust surface is real — a skill is code that executes in your agent. I built this so there's always a checkpoint before that trust is extended.
+
+---
 
 ### `vet-recommendation`
 
