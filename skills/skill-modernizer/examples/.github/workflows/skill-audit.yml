@@ -1,0 +1,96 @@
+name: Skill audit
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**'
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    name: Audit skills
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install skill-modernizer
+        run: npx -y skills add <user>/skill-modernizer
+        # Replace <user> with the maintainer account hosting the skill.
+
+      - name: Run audit-all
+        id: audit
+        run: |
+          npx skill-modernizer audit-all --json ./skills > audit.json
+          jq -e '.result.skills | length > 0' audit.json > /dev/null
+
+      - name: Fail on any F grade
+        run: |
+          failures=$(jq -r '.result.skills[] | select(.overall_grade == "F") | .skill' audit.json)
+          if [ -n "$failures" ]; then
+            echo "::error::Skills graded F:"
+            echo "$failures" | sed 's/^/::error::- /'
+            exit 1
+          fi
+
+      - name: Fail on grade regression vs base
+        if: github.event_name == 'pull_request'
+        run: |
+          # Fetch base ref's audit if it exists; compare grades.
+          git fetch origin "${GITHUB_BASE_REF}"
+          git checkout "origin/${GITHUB_BASE_REF}" -- skills/ || true
+          npx skill-modernizer audit-all --json ./skills > base-audit.json || echo '{"result":{"skills":[]}}' > base-audit.json
+          git checkout HEAD -- skills/
+
+          jq -s '
+            def grade_to_num: {"A":4,"B":3,"C":2,"D":1,"F":0}[. // "F"];
+            (.[0].result.skills // []) as $base
+            | (.[1].result.skills // []) as $head
+            | $head[] as $h
+            | ($base[] | select(.skill == $h.skill) | .overall_grade) as $bg
+            | select($bg != null and ($h.overall_grade | grade_to_num) < ($bg | grade_to_num))
+            | "\($h.skill): \($bg) → \($h.overall_grade)"
+          ' base-audit.json audit.json > regressions.txt
+
+          if [ -s regressions.txt ]; then
+            echo "::error::Grade regressions detected:"
+            sed 's/^/::error::- /' regressions.txt
+            exit 1
+          fi
+
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-audit-results
+          path: |
+            audit.json
+            base-audit.json
+            regressions.txt
+
+      - name: Comment audit summary on PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const audit = JSON.parse(fs.readFileSync('audit.json', 'utf8'));
+            const skills = audit.result?.skills || [];
+            const summary = skills
+              .map(s => `| ${s.skill} | ${s.overall_grade ?? 'unknown'} | ${s.weighted_gpa?.toFixed(2) ?? '—'} |`)
+              .join('\n');
+            const body = `## Skill audit\n\n| Skill | Grade | GPA |\n|---|---|---|\n${summary}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
